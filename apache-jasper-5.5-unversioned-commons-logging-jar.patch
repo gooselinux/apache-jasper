@@ -1,0 +1,22 @@
+--- container/catalina/src/conf/catalina.policy.old	2009-11-09 23:02:25.913624316 +0200
++++ container/catalina/src/conf/catalina.policy	2009-11-09 23:02:46.028749940 +0200
+@@ -66,7 +66,7 @@
+ };
+ 
+ // These permissions apply to the commons-logging API
+-grant codeBase "file:${catalina.home}/bin/commons-logging-api-1.1.1.jar" {
++grant codeBase "file:${catalina.home}/bin/commons-logging-api.jar" {
+         permission java.security.AllPermission;
+ };
+ 
+--- container/catalina/etc/bootstrap.MF.old	2009-11-09 23:03:40.576377237 +0200
++++ container/catalina/etc/bootstrap.MF	2009-11-09 23:03:54.279373842 +0200
+@@ -1,5 +1,5 @@
+ Manifest-Version: 1.0
+ Main-Class: org.apache.catalina.startup.Bootstrap
+-Class-Path: jmx.jar commons-daemon.jar commons-logging-api-1.1.1.jar tomcat-juli.jar
++Class-Path: jmx.jar commons-daemon.jar commons-logging-api.jar tomcat-juli.jar
+ Specification-Title: Catalina
+-Specification-Version: 1.0
+\ No newline at end of file
++Specification-Version: 1.0

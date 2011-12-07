@@ -1,0 +1,37 @@
+--- jasper/src/bin/jspc.sh.sav	2008-07-14 11:30:15.000000000 -0400
++++ jasper/src/bin/jspc.sh	2008-07-14 11:31:25.000000000 -0400
+@@ -21,32 +21,9 @@
+ # $Id: jspc.sh 565193 2007-08-12 22:53:10Z markt $
+ # -----------------------------------------------------------------------------
+ 
+-# resolve links - $0 may be a softlink
+-PRG="$0"
+-
+-while [ -h "$PRG" ] ; do
+-  ls=`ls -ld "$PRG"`
+-  link=`expr "$ls" : '.*-> \(.*\)$'`
+-  if expr "$link" : '.*/.*' > /dev/null; then
+-    PRG="$link"
+-  else
+-    PRG=`dirname "$PRG"`/"$link"
+-  fi
+-done
+- 
+-PRGDIR=`dirname "$PRG"`
+-EXECUTABLE=jasper.sh
+-
+-# Check that target executable exists
+-if [ ! -x "$PRGDIR"/"$EXECUTABLE" ]; then
+-  echo "Cannot find $PRGDIR/$EXECUTABLE"
+-  echo "This file is needed to run this program"
+-  exit 1
+-fi
+-
+ if [ "$1" = "debug" ]; then
+   shift
+-  exec "$PRGDIR"/"$EXECUTABLE" debug "$@"
++  exec jasper5.sh debug "$@"
+ else
+-  exec "$PRGDIR"/"$EXECUTABLE" jspc "$@"
++  exec jasper5.sh jspc "$@"
+ fi

@@ -1,0 +1,20 @@
+--- jasper/build.xml.sav	2006-03-23 16:52:01.000000000 +0100
++++ jasper/build.xml	2006-03-23 16:53:17.000000000 +0100
+@@ -38,6 +38,8 @@
+     <pathelement location="${commons-logging.jar}"/>
+     <pathelement location="${commons-daemon-launcher.jar}"/>
+     <pathelement location="${jasper.build}/shared/classes"/>
++    <pathelement location="${base.path}/jdtcore.jar"/>
++
+   </path>
+ 
+   <!-- Construct unit tests classpath -->
+@@ -54,6 +56,8 @@
+     <pathelement location="${commons-launcher.jar}"/>
+     <pathelement location="${jasper.build}/shared/classes"/>
+     <pathelement location="${jasper.build}/tests"/>
++    <pathelement location="${base.path}/jdtcore.jar"/>
++
+   </path>
+ 
+ 

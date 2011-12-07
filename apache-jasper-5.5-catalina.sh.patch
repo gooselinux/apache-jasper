@@ -1,0 +1,126 @@
+--- container/catalina/src/bin/catalina.sh.old	2009-11-09 21:38:50.014749172 +0200
++++ container/catalina/src/bin/catalina.sh	2009-11-09 22:57:08.879499256 +0200
+@@ -60,6 +60,11 @@
+ Darwin*) darwin=true;;
+ esac
+ 
++if [ -z "$CATALINA_HOME" ]; then
++    TOMCAT_CFG="@@@TCCONF@@@/tomcat5.conf"
++fi
++JAVADIR="/usr/share/java"
++
+ # resolve links - $0 may be a softlink
+ PRG="$0"
+ 
+@@ -110,30 +115,73 @@
+   export QIBM_MULTI_THREADED=Y
+ fi
+ 
+-# Get standard Java environment variables
+-if $os400; then
+-  # -r will Only work on the os400 if the files are:
+-  # 1. owned by the user
+-  # 2. owned by the PRIMARY group of the user
+-  # this will not work if the user belongs in secondary groups
+-  BASEDIR="$CATALINA_HOME"
+-  . "$CATALINA_HOME"/bin/setclasspath.sh 
+-else
+-  if [ -r "$CATALINA_HOME"/bin/setclasspath.sh ]; then
+-    BASEDIR="$CATALINA_HOME"
+-    . "$CATALINA_HOME"/bin/setclasspath.sh
+-  else
+-    echo "Cannot find $CATALINA_HOME/bin/setclasspath.sh"
+-    echo "This file is needed to run this program"
+-    exit 1
+-  fi
++if [ -z "$CATALINA_HOME" ]; then
++    [ -r "$TOMCAT_CFG" ] && . "${TOMCAT_CFG}"
++ fi
++
++### Set up defaults if they were omitted in TOMCAT_CFG
++###  JVM lookup
++if [ -z "$JAVA_HOME" ]; then
++    # Search for java in PATH
++    JAVA=`which java`
++    if [ -z "$JAVA" ] ; then
++        JAVA_BINDIR=`dirname ${JAVA}`
++        JAVA_HOME="${JAVA_BINDIR}/.."
++    fi
++    # Default clean JAVA_HOME
++    [ -z "$JAVA_HOME" -a -d "/usr/lib/java" ] && JAVA_HOME="/usr/lib/java"
++    # Default IBM JAVA_HOME
++    [ -z "$JAVA_HOME" -a -d "/opt/IBMJava2-13" ] && \
++        JAVA_HOME="/opt/IBMJava2-13"
++    [ -z "$JAVA_HOME" -a -d "/opt/IBMJava2-131" ] && \
++        JAVA_HOME="/opt/IBMJava2-131"
++    [ -z "$JAVA_HOME" -a -d "/opt/IBMJava2-14" ] && \
++        JAVA_HOME="/opt/IBMJava2-14"
++    [ -z "$JAVA_HOME" -a -d "/opt/IBMJava2-141" ] && \
++        JAVA_HOME="/opt/IBMJava2-141"
++    # Another solution
++    [ -z "$JAVA_HOME" -a -d "/usr/java/jdk" ] && \
++        JAVA_HOME="/usr/java/jdk"
++    # madeinlinux JAVA_HOME
++    [ -z "$JAVA_HOME" -a -d "/usr/local/jdk1.2.2" ] && \
++        JAVA_HOME="/usr/local/jdk1.2.2"
++    # Kondara JAVA_HOME
++    [ -z "$JAVA_HOME"  -a -d "/usr/lib/java/jdk1.2.2" ] && \
++        JAVA_HOME="/usr/lib/java/jdk1.2.2"
++    # Other commonly found JAVA_HOMEs
++    [ -z "$JAVA_HOME"  -a -d "/usr/jdk1.2" ] && JAVA_HOME="/usr/jdk1.2"
++    # Default Caldera JAVA_HOME
++    [ -z "$JAVA_HOME"  -a -d "/opt/java-1.3" ] && \
++        JAVA_HOME="/opt/java-1.3"
++    # Add other locations here
++    if [ -z "$JAVA_HOME" ]; then
++        echo "No JAVA_HOME specified in ${TOMCAT_CFG} and no java found"
++        exit 1
++    else
++        echo "Found JAVA_HOME: ${JAVA_HOME}"
++        echo "Please complete your ${TOMCAT_CFG} so we won't have to look for it next time"
++    fi
+ fi
+ 
++# Set standard commands for invoking Java.
++_RUNJAVA="$JAVA_HOME"/bin/java
++_RUNJAVAC="$JAVA_HOME"/bin/javac
++_RUNJDB="$JAVA_HOME"/bin/jdb
++
++# Set standard CLASSPATH
++CLASSPATH="$JAVA_HOME"/lib/tools.jar
++
+ # Add on extra jar files to CLASSPATH
+ if [ ! -z "$CLASSPATH" ] ; then
+   CLASSPATH="$CLASSPATH":
+ fi
+-CLASSPATH="$CLASSPATH""$CATALINA_HOME"/bin/bootstrap.jar
++
++# JPackage JSSE location check
++if [ -r "$JAVADIR/jsse/jcert.jar" ]; then
++  CLASSPATH="$CLASSPATH":"$JAVADIR"/jsse/jcert.jar:"$JAVADIR"/jsse/jnet.jar:"$JAVADIR"/jsse/jsse.jar
++fi
++        
++CLASSPATH="$CLASSPATH":"$CATALINA_HOME"/bin/bootstrap.jar:"$CATALINA_HOME"/bin/commons-logging-api.jar:`/usr/bin/build-classpath mx4j/mx4j-impl`:`/usr/bin/build-classpath mx4j/mx4j-jmx`
+ 
+ if [ -z "$CATALINA_BASE" ] ; then
+   CATALINA_BASE="$CATALINA_HOME"
+@@ -150,6 +198,10 @@
+     have_tty=1
+ fi
+ 
++if [ -z "$CATALINA_PID" ] ; then
++    export CATALINA_PID=/var/run/tomcat5.pid
++fi
++
+ # For Cygwin, switch paths to Windows format before running java
+ if $cygwin; then
+   JAVA_HOME=`cygpath --absolute --windows "$JAVA_HOME"`
+@@ -321,7 +373,7 @@
+ 
+ else
+ 
+-  echo "Usage: catalina.sh ( commands ... )"
++  echo "Usage: dtomcat5 ( commands ... )"
+   echo "commands:"
+   if $os400; then
+     echo "  debug             Start Catalina in a debugger (not available on OS400)"

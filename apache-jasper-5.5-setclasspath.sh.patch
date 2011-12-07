@@ -1,0 +1,11 @@
+--- container/catalina/src/bin/setclasspath.sh.sav	2006-03-23 17:37:23.000000000 +0100
++++ container/catalina/src/bin/setclasspath.sh	2006-03-23 17:38:35.000000000 +0100
+@@ -50,7 +50,7 @@
+   echo "This environment variable is needed to run this program"
+   exit 1
+ fi
+-if [ ! -x "$BASEDIR"/bin/setclasspath.sh ]; then
++if [ ! -x "$BASEDIR"/bin/jasper5-setclasspath.sh ]; then
+   if $os400; then
+     # -x will Only work on the os400 if the files are:
+     # 1. owned by the user

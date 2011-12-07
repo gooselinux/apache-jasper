@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ClassPath: .
+Bundle-Vendor: %bundleProvider
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.4,CDC-1.0/Foundation-1.0,J
+ 2SE-1.3
+Bundle-Name: %bundleName
+Bundle-SymbolicName: org.apache.jasper
+Export-Package: org.apache.jasper,org.apache.jasper.compiler,org.apach
+ e.jasper.compiler.tagplugin,org.apache.jasper.resources,org.apache.ja
+ sper.runtime,org.apache.jasper.security,org.apache.jasper.servlet,org
+ .apache.jasper.tagplugins.jstl,org.apache.jasper.tagplugins.jstl.core
+ ,org.apache.jasper.util,org.apache.jasper.xmlparser
+Bundle-Version: 5.5.17.v200903231320
+Bundle-ManifestVersion: 2
+Import-Package: javax.servlet;version="2.4",javax.servlet.http;version
+ ="2.4",javax.servlet.jsp;version="2.0",javax.servlet.jsp.el;version="
+ 2.0",javax.servlet.jsp.resources;version="2.0",javax.servlet.jsp.tage
+ xt;version="2.0",javax.servlet.resources;version="2.4",javax.xml.pars
+ ers,org.apache.commons.el;version="[1.0.0,2.0.0)",org.apache.commons.
+ logging;version="[1.0.0,2.0.0)",org.apache.tools.ant;resolution:=opti
+ onal,org.apache.tools.ant.taskdefs;resolution:=optional,org.apache.to
+ ols.ant.types;resolution:=optional,org.apache.tools.ant.util;resoluti
+ on:=optional,org.w3c.dom,org.xml.sax,org.xml.sax.ext,org.xml.sax.help
+ ers
+

@@ -1,0 +1,68 @@
+--- jasper/src/bin/jasper.sh.sav	2006-03-23 17:14:58.000000000 +0100
++++ jasper/src/bin/jasper.sh	2006-03-23 17:24:56.000000000 +0100
+@@ -45,34 +45,37 @@
+   . "$JASPER_HOME"/bin/setenv.sh
+ fi
+ 
+-# For Cygwin, ensure paths are in UNIX format before anything is touched
+-if $cygwin; then
+-  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+-  [ -n "$JASPER_HOME" ] && JASPER_HOME=`cygpath --unix "$JASPER_HOME"`
+-  [ -n "$CLASSPATH" ] && CLASSPATH=`cygpath --path --unix "$CLASSPATH"`
+-fi
++# Set standard commands for invoking Java.
++_RUNJAVA="$JAVA_HOME"/bin/java
++_RUNJDB="$JAVA_HOME"/bin/jdb
++_RUNJAVAC="$JAVA_HOME"/bin/javac
+ 
+ # Get standard Java environment variables
+-if [ -r "$JASPER_HOME"/bin/setclasspath.sh ]; then
++if [ -r "$JASPER_HOME"/bin/jasper5-setclasspath.sh ]; then
+   BASEDIR="$JASPER_HOME"
+-  . "$JASPER_HOME"/bin/setclasspath.sh
++  . "$JASPER_HOME"/bin/jasper5-setclasspath.sh
+ else
+-  echo "Cannot find $JASPER_HOME/bin/setclasspath.sh"
++  echo "Cannot find $JASPER_HOME/bin/jasper5-setclasspath.sh"
+   echo "This file is needed to run this program"
+   exit 1
+ fi
+ 
+ # Add on extra jar files to CLASSPATH
+-for i in "$JASPER_HOME"/common/endorsed/*.jar; do
+-  CLASSPATH="$CLASSPATH":"$i"
+-done
+-for i in "$JASPER_HOME"/common/lib/*.jar; do
+-  CLASSPATH="$CLASSPATH":"$i"
+-done
+-for i in "$JASPER_HOME"/shared/lib/*.jar; do
+-  CLASSPATH="$CLASSPATH":"$i"
+-done
+-CLASSPATH="$CLASSPATH":"$JASPER_HOME"/shared/classes
++CLASSPATH=$CLASSPATH:$(build-classpath \
++    ant \
++    commons-collections \
++    commons-daemon \
++    commons-el \
++    commons-logging \
++    ecj.jar \
++    jasper5-compiler \
++    jasper5-runtime \
++    jsp \
++    servlet \
++    xerces-j2 \
++    xml-commons-apis \
++)
++
+ 
+ # For Cygwin, switch paths to Windows format before running java
+ if $cygwin; then
+@@ -103,7 +107,7 @@
+ 
+ else
+ 
+-  echo "Usage: jasper.sh ( jspc )"
++  echo "Usage: $0 ( jspc )"
+   echo "Commands:"
+   echo "  jspc - Run the offline JSP compiler"
+   exit 1

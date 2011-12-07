@@ -1,0 +1,10 @@
+--- build/build.xml.sav	2008-07-14 11:59:37.000000000 -0400
++++ build/build.xml	2008-07-14 11:59:57.000000000 -0400
+@@ -433,6 +433,7 @@
+ 
+     <path id="jspc.classpath">
+       <pathelement location="${java.home}/../lib/tools.jar"/>
++      <pathelement location="@JAVA_HOME@/jre/lib/rt.jar"/>
+       <pathelement location="${commons-logging.jar}"/>
+       <pathelement location="${tomcat.build}/server/classes"/>
+       <fileset dir="${tomcat.build}/server/lib">
